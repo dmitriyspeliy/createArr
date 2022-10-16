@@ -2,28 +2,28 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class StringListImpl implements StringList {
-    private String[] arr;
+public class IntegerListImpl implements IntegerList {
+    private Integer[] arr;
 
-    public StringListImpl() {
-        arr = new String[0];
+    public IntegerListImpl() {
+        arr = new Integer[0];
     }
 
-    public StringListImpl(String... str) {
-        arr = new String[str.length];
+    public IntegerListImpl(Integer... str) {
+        arr = new Integer[str.length];
         System.arraycopy(str, 0, arr, 0, str.length);
     }
 
 
     @Override
-    public String add(String item) {
+    public Integer add(Integer item) {
         if (item == null) throw new NullPointerException("Вставить Null нельзя");
         if (arr.length == 0) {
-            arr = new String[1];
+            arr = new Integer[1];
             arr[0] = item;
             return item;
         }
-        String[] tmpArr = new String[arr.length + 1];
+        Integer[] tmpArr = new Integer[arr.length + 1];
         System.arraycopy(arr, 0, tmpArr, 0, arr.length);
         arr = tmpArr;
         arr[arr.length - 1] = item;
@@ -31,15 +31,15 @@ public class StringListImpl implements StringList {
     }
 
     @Override
-    public String add(int index, String item) {
+    public Integer add(int index, Integer item) {
         if (item == null) throw new NullPointerException("Вставить Null нельзя");
         if (index > arr.length || index < 0) throw new RuntimeException("Нет такого индекса");
         if (arr.length == 0) {
-            arr = new String[1];
+            arr = new Integer[1];
             arr[0] = item;
             return item;
         }
-        String[] tmpArr = new String[arr.length + 1];
+        Integer[] tmpArr = new Integer[arr.length + 1];
         System.arraycopy(arr, index, tmpArr, index + 1, arr.length - index);
         System.arraycopy(arr, 0, tmpArr, 0, index);
         tmpArr[index] = item;
@@ -48,11 +48,11 @@ public class StringListImpl implements StringList {
     }
 
     @Override
-    public String set(int index, String item) {
+    public Integer set(int index, Integer item) {
         if (item == null) throw new NullPointerException("Установить Null нельзя");
         if (index > arr.length || index < 0) throw new RuntimeException("Нет такого индекса");
         if (arr.length == 0) {
-            arr = new String[1];
+            arr = new Integer[1];
             arr[0] = item;
             return item;
         }
@@ -61,7 +61,7 @@ public class StringListImpl implements StringList {
     }
 
     @Override
-    public String remove(String item) {
+    public Integer remove(Integer item) {
         if (item == null) throw new NullPointerException("Удалить Null нельзя");
         int index = 0;
         boolean find = false;
@@ -72,37 +72,60 @@ public class StringListImpl implements StringList {
             }
         }
         if (!find) throw new NullPointerException("Такого элемента нет");
-        return getString(index, item);
+        return arr[index];
     }
 
     @Override
-    public String remove(int index) {
+    public Integer remove(int index) {
         if (isEmpty() || index < 0 || index >= arr.length) throw new NullPointerException("Нет такого индекса");
-        String elem = arr[index];
-        return getString(index, elem);
+        Integer elem = arr[index];
+        return getInteger(index, elem);
     }
 
-    private String getString(int index, String elem) {
-        String[] tmpArr = new String[arr.length - 1];
+    private Integer getInteger(int index, Integer elem) {
+        Integer[] tmpArr = new Integer[arr.length - 1];
         System.arraycopy(arr, index + 1, tmpArr, index, arr.length - index - 1);
         System.arraycopy(arr, 0, tmpArr, 0, index);
         arr = tmpArr;
         return elem;
     }
 
+
     @Override
-    public boolean contains(String item) {
+    public boolean contains(Integer item) {
         return Arrays.asList(arr).contains(item);
     }
 
+
+    public boolean BinarySearchContains(Integer item) {
+        sortingArr();
+        int min = 0;
+        int max = arr.length - 1;
+
+        while (min <= max) {
+            int mid = (min + max) / 2;
+
+            if (Objects.equals(item, arr[mid])) {
+                return true;
+            }
+
+            if (item < arr[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
+
     @Override
-    public int indexOf(String item) {
+    public int indexOf(Integer item) {
         if (item == null) throw new NullPointerException();
         return IntStream.range(0, arr.length).filter(i -> arr[i].equals(item)).findFirst().orElse(-1);
     }
 
     @Override
-    public int lastIndexOf(String item) {
+    public int lastIndexOf(Integer item) {
         if (item == null) throw new NullPointerException();
         int count = 0;
         for (int i = arr.length - 1; i >= 0; i--) {
@@ -115,13 +138,13 @@ public class StringListImpl implements StringList {
     }
 
     @Override
-    public String get(int index) {
+    public Integer get(int index) {
         if (index < 0 || index >= arr.length) throw new NullPointerException("Нет такого индекса");
         return arr[index];
     }
 
     @Override
-    public boolean equals(StringListImpl otherList) {
+    public boolean equals(IntegerListImpl otherList) {
         if (otherList == null) throw new NullPointerException();
         return Arrays.equals(otherList.getArr(), this.getArr());
     }
@@ -136,17 +159,29 @@ public class StringListImpl implements StringList {
         return arr.length == 0;
     }
 
-    @Override
-    public void clear() {
-        arr = new String[0];
+    private void sortingArr() {
+        for (int i = 1; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+        }
     }
 
     @Override
-    public String[] toArray() {
+    public void clear() {
+        arr = new Integer[0];
+    }
+
+    @Override
+    public Integer[] toArray() {
         return getArr();
     }
 
-    public String[] getArr() {
+    public Integer[] getArr() {
         return arr;
     }
 
