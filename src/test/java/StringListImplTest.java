@@ -21,7 +21,7 @@ class IntegerListImplTest {
     @Test
     void add() {
         assertTrue(stringList.contains(1));
-        assertFalse(stringList.contains(null));
+        assertTrue(stringList.contains(null));
         assertEquals(stringList.indexOf(1), 0);
         assertEquals(stringList.size(), 5);
         assertEquals(stringList.add(6), 6);
@@ -34,7 +34,6 @@ class IntegerListImplTest {
         stringList.add(1, 121);
         assertEquals(stringList.indexOf(121), 1);
         assertEquals(stringList.indexOf(2), 2);
-        assertFalse(stringList.contains(null));
         assertThrows(NullPointerException.class, () -> stringList.add(null));
         assertThrows(RuntimeException.class, () -> stringList.add(1203, 34));
         assertThrows(RuntimeException.class, () -> stringList.add(-12, 34));
@@ -46,31 +45,28 @@ class IntegerListImplTest {
         stringList.set(0, 14);
         assertFalse(stringList.contains(1));
         assertTrue(stringList.contains(14));
-        assertFalse(stringList.contains(null));
+        assertTrue(stringList.contains(null));
         assertEquals(stringList.indexOf(14), 0);
         assertThrows(RuntimeException.class, () -> stringList.set(1203, 3123));
         assertThrows(RuntimeException.class, () -> stringList.set(-12, 3213));
         assertThrows(NullPointerException.class, () -> stringList.set(1, null));
         stringList.set(2, 44);
         assertEquals(2, stringList.indexOf(44));
-        assertEquals(stringList.add(55), 55);
+        assertEquals(stringList.set(3,55), 55);
     }
 
     @Test
     void remove() {
         assertEquals(2, stringList.remove(1));
         assertFalse(stringList.contains(2));
-        assertFalse(stringList.contains(null));
-        assertThrows(NullPointerException.class, () -> stringList.remove(null));
         assertThrows(NullPointerException.class, () -> stringList.remove(1231));
     }
 
     @Test
     void testRemove() {
-        assertThrows(NullPointerException.class, () -> stringList.remove(1000));
-        assertThrows(NullPointerException.class, () -> stringList.remove(-1));
-        assertEquals(1, stringList.remove(0));
-        assertFalse(stringList.contains(null));
+        assertThrows(NullPointerException.class, () -> stringList.remove(Integer.valueOf(1000)));
+        assertThrows(NullPointerException.class, () -> stringList.remove(Integer.valueOf(-1)));
+        assertEquals(1, stringList.remove(Integer.valueOf(1)));
         assertFalse(stringList.contains(1));
     }
 
